@@ -61,7 +61,7 @@ main {
 .btn:hover {
     background-color: #a043f1;
 }
-.potential-answers {
+.choices {
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -76,11 +76,10 @@ main {
     display: none;
 }
 .visible {
-    display: flex;
+    display: block;
 }
 
 .question-result {
-    display:none;
     border-top: 1px solid gray;
     color: gray;
     padding: 10px 25px;
