@@ -40,6 +40,7 @@ const questions = [
 
 ];
 
+
 //create a timer function
 var timer = function() {
     var timerInterval = setInterval(function() {
@@ -98,31 +99,36 @@ var removeQuestion = function() {
     checkQuestionEl.remove();
 }
 
-//start quiz function
-var startQuiz = function() {
-    timer();
-    hideIntro();
-    var i = 0;
+var questionCreator = function(index) {
     var questionDiv = document.createElement('section');
     questionDiv.setAttribute("id","question")
     questionDiv.classList.add("questions","visible")  ;
     var questionEl = document.createElement('h1');
-    questionEl.textContent = questions[i].question;
+    questionEl.textContent = questions[index].question;
     var questionChoicesOl = document.createElement('ol');
     questionChoicesOl.className = "choices";
     pageContentEl.appendChild(questionDiv);
     questionDiv.appendChild(questionEl);
     questionDiv.appendChild(questionChoicesOl);
     
-    questions[i].choices.forEach(element => {
+    questions[index].choices.forEach(element => {
         var questionChoicesLi = document.createElement('li')
-        questionChoicesLi.innerHTML = "<button class = 'btn' question = '" + i + "' id = " + element + ">"+element+ "</button>"
-        // questionChoicesLi.setAttribute("question", i);
+        questionChoicesLi.innerHTML = "<button class = 'btn' question = '" + index + "' id = " + element + ">"+element+ "</button>";
         questionChoicesOl.appendChild(questionChoicesLi);
     });
+};
 
-    pageContentEl.addEventListener("click", choiceHandler);
+//start quiz function
+var startQuiz = function() {
+    timer();
+    hideIntro();
 
+    var i = 0;
+    while (i < questions.length) {
+        questionCreator(i);
+        pageContentEl.addEventListener("click", choiceHandler);
+        i ++;
+    }
     
 
 };
