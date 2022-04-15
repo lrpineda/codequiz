@@ -86,3 +86,65 @@ main {
     width: 80vw;
     text-align: left;
 }
+.quiz-over {
+    padding: 25px;
+    text-align: left;
+    
+}
+.quiz-over p {
+    padding-top: 20px;
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+.high-scores{
+    padding: 25px;
+    text-align: left;
+    
+}
+.scores-list {
+    counter-reset: item;
+    list-style: none;
+    padding-top: 25px;
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+.scores-list li::before{
+    content: counter(item);
+    margin-right: 10px;
+    
+}
+.scores-list li {
+    counter-increment: item;
+    padding: 10px;
+    width: 50vw;
+    background-color: #decced;
+}
+
+
+.input {
+    border: 1px solid #830aed;
+    padding: 7px 15px;
+    font-size: 16px;
+    color: #000000;
+  
+    margin-bottom: 15px;
+    background-color: #decced;
+}
+
+.form-btn {
+    background-color: #a043f1;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 12px;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.form-btn:hover {
+    background-color: #6802c2;
+}
