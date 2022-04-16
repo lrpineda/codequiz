@@ -1,3 +1,4 @@
+//Main variables declaration
 var score = 0;
 var timeLeft = 75;
 var counter = 0;
@@ -7,6 +8,7 @@ var pageContentEl = document.querySelector("#page-content");
 var intropageEl = document.querySelector(".intro");
 var highScoreEl = document.querySelector("#high-scores");
 
+//Setting up a delayer function
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 //Creation of questions
@@ -30,7 +32,7 @@ const questions = [
       "booleans",
       "all of the above",
     ],
-    correctAnswer: "all of the above",
+    correctAnswer: "all",
   },
   {
     question:
@@ -58,10 +60,12 @@ var timer = function () {
   }, 1000);
 };
 
+//Creating a hide intro function
 var hideIntro = function () {
   intropageEl.style.display = "none";
 };
 
+//Creating function to display a new section that will display the results of the quiz
 var quizOver = function () {
     if (score < 0) {
         score = 0;
@@ -82,9 +86,10 @@ var quizOver = function () {
     //submit score
     var submitBtn = document.querySelector("#submit");
     submitBtn.addEventListener("click", storeScores);
-    
+
 };
 
+// Store scores function
 var storeScores = function () {
     var userInitials = document.querySelector(".input").value;
     var userScore = score;
@@ -98,8 +103,14 @@ var storeScores = function () {
     highScoreList();
 };
 
+//Start over function
+var startOver = function() {
+    location.reload();
+    
+}
+//Creating a function that will show the high scores
 var highScoreList = function() {
-    var storedScores = JSON.parse(localStorage.getItem("scores"));
+    var hideElQuizOver = document.querySelector(".quiz-over");
     var highScoreEl = document.createElement("section");
     highScoreEl.className = "high-scores";
     var titleEl = document.createElement("h1");
@@ -107,16 +118,59 @@ var highScoreList = function() {
     highScoreEl.appendChild(titleEl);
     var highScoreOl = document.createElement("ol");
     highScoreOl.className = "scores-list";
+    var storedScores = JSON.parse(localStorage.getItem("scores"));
+    if (hideElQuizOver) {
+        hideElQuizOver.style.display = "none";
+    }
+    var hideElIntro = document.querySelector(".intro");
+    if (hideElIntro) {
+        hideElIntro.style.display = "none";
+    }
     
-    for (var i = 0; i < storedScores.length; i++) {
+    if (storedScores) {
+        storedScores.sort(function (a, b) {
+            return b.score - a.score;});
+        for (var i = 0; i < storedScores.length; i++) {
+            var scoreEl = document.createElement("li");
+            scoreEl.textContent = storedScores[i].initials + " - " + storedScores[i].score;
+            highScoreOl.appendChild(scoreEl);
+        }
+    }else {
         var scoreEl = document.createElement("li");
-        scoreEl.textContent = storedScores[i].initials + " - " + storedScores[i].score;
+        scoreEl.textContent = "No high scores yet!";
         highScoreOl.appendChild(scoreEl);
     }
+        
+    var goBackEl = document.createElement("button");
+    goBackEl.textContent = "Go Back";
+    goBackEl.className = "form-btn";
+    goBackEl.setAttribute("id", "back");
+
+    var clearEl = document.createElement("button");
+    clearEl.textContent = "Clear High Scores";
+    clearEl.className = "form-btn";
+    clearEl.setAttribute("id", "clear");
     highScoreEl.appendChild(highScoreOl);
+    highScoreEl.appendChild(goBackEl);
+    highScoreEl.appendChild(clearEl);
     pageContentEl.appendChild(highScoreEl);
+    var backBtn = document.querySelector("#back");
+    backBtn.addEventListener("click", startOver);
+    var clearBtn = document.querySelector("#clear");
+    clearBtn.addEventListener("click", function ()
+    {
+        localStorage.clear();
+        highScoreEl.remove();
+        highScoreList();
+    });
 };
 
+//Function to create the high score list
+var viewHighScores = function () {
+    highScoreList();
+};
+
+//Function to show result of each question
 var questionResult = function (id, choice) {
   var checkQuestionEl = document.querySelector("#question");
 
@@ -126,7 +180,7 @@ var questionResult = function (id, choice) {
   console.log("Correct Answer: ", questions[id].correctAnswer);
   console.log("Choice was: ", choice);
 
-  if (choice == questions[id].correctAnswer) {
+  if (choice === questions[id].correctAnswer) {
     questionResultEl.textContent = "Correct!";
     checkQuestionEl.appendChild(questionResultEl);
   } else {
@@ -148,6 +202,7 @@ var questionResult = function (id, choice) {
   }, 1000);
 };
 
+//Function to handle each choice of each question
 var choiceHandler = function (event) {
   var targetEl = event.target;
 
@@ -158,6 +213,7 @@ var choiceHandler = function (event) {
   }
 };
 
+//fuNction to remove the question
 var removeQuestion = function () {
   var checkQuestionEl = document.querySelector("#question");
   checkQuestionEl.remove();
@@ -202,3 +258,5 @@ var startQuiz = function () {
 //start the quiz
 startBtn.addEventListener("click", startQuiz);
 
+//view high scores
+highScoreEl.addEventListener("click", viewHighScores);
