@@ -2,6 +2,7 @@
 var score = 0;
 var timeLeft = 75;
 var counter = 0;
+var correctChoice = 0;
 var showTimeEl = document.querySelector("#counter");
 var startBtn = document.querySelector("#start-quiz");
 var pageContentEl = document.querySelector("#page-content");
@@ -54,8 +55,10 @@ var timer = function () {
     showTimeEl.textContent = "Time:" + timeLeft;
     timeLeft--;
     if (timeLeft == 0 || counter >= questions.length) {
-      clearInterval(timerInterval);
-      showTimeEl.textContent = "Time:0";
+        clearInterval(timerInterval);
+        showTimeEl.textContent = "Time:0";
+        removeQuestion();
+        quizOver();
     }
   }, 1000);
 };
@@ -183,6 +186,7 @@ var questionResult = function (id, choice) {
   if (choice === questions[id].correctAnswer) {
     questionResultEl.textContent = "Correct!";
     checkQuestionEl.appendChild(questionResultEl);
+    correctChoice ++;
   } else {
     questionResultEl.textContent = "Wrong!";
     checkQuestionEl.appendChild(questionResultEl);
@@ -194,10 +198,12 @@ var questionResult = function (id, choice) {
     if (counter < questions.length) {
       questionCreator();
     } else {
-      score = timeLeft;
+        if (correctChoice === 0) {
+            score = 0;
+        }else{
+            score = correctChoice/questions.length * 100;
+        }
       quizOver();
-      console.log("Game over?");
-      console.log("Score is " + score);
     }
   }, 1000);
 };
